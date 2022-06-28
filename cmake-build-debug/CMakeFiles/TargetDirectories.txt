@@ -1,0 +1,3 @@
+C:/Users/Дмитрий/Desktop/i_hate_cpp/cmake-build-debug/CMakeFiles/i_hate_cpp.dir
+C:/Users/Дмитрий/Desktop/i_hate_cpp/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Дмитрий/Desktop/i_hate_cpp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
