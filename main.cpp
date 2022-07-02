@@ -4,22 +4,9 @@
 #include "week1/task3.h"
 
 int main() {
-    int a[3] = {2, 3, 5};
-    int b[3] = {3, 0, 0};
-    GeometricVector<int, 3> vec1(a);
-    GeometricVector<int, 3> vec2(b);
-    vec1.show();
-    vec2.show();
-    //GeometricVector<int, 3> vec3 = vec1 + vec2;
-    //vec3.show();
-    //GeometricVector<int, 3> vec4 = vec1-vec2;
-    //vec4.show();
-    std::cout << vec1.get_length() << std::endl;
-    std::cout << vec2.get_length() << std::endl;
-    if (vec2 > vec1) {
-        std::cout << "vec2 > vec1";
-    }
-    vec1 = vec2;
-    vec1.show();
-    return 0;
+    int c[7] = {1, 2, 3, 4, 5};
+    GeometricVector<int, -1> vec5(c, 5);
+    vec5.show();
+    vec5.add_element(10);
+    vec5.show();
 }
