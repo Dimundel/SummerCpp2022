@@ -61,12 +61,6 @@ build CMakeFiles/i_hate_cpp.dir/week1/task1.cpp.obj: CXX_COMPILER__i_hate_cpp_De
   OBJECT_DIR = CMakeFiles\i_hate_cpp.dir
   OBJECT_FILE_DIR = CMakeFiles\i_hate_cpp.dir\week1
 
-build CMakeFiles/i_hate_cpp.dir/week1/task2.cpp.obj: CXX_COMPILER__i_hate_cpp_Debug C$:/Users/ִלטענטי/Desktop/i_hate_cpp/week1/task2.cpp || cmake_object_order_depends_target_i_hate_cpp
-  DEP_FILE = CMakeFiles\i_hate_cpp.dir\week1\task2.cpp.obj.d
-  FLAGS = -g -std=gnu++14
-  OBJECT_DIR = CMakeFiles\i_hate_cpp.dir
-  OBJECT_FILE_DIR = CMakeFiles\i_hate_cpp.dir\week1
-
 
 # =============================================================================
 # Link build statements for EXECUTABLE target i_hate_cpp
@@ -75,7 +69,7 @@ build CMakeFiles/i_hate_cpp.dir/week1/task2.cpp.obj: CXX_COMPILER__i_hate_cpp_De
 #############################################
 # Link the executable i_hate_cpp.exe
 
-build i_hate_cpp.exe: CXX_EXECUTABLE_LINKER__i_hate_cpp_Debug CMakeFiles/i_hate_cpp.dir/main.cpp.obj CMakeFiles/i_hate_cpp.dir/week1/task1.cpp.obj CMakeFiles/i_hate_cpp.dir/week1/task2.cpp.obj
+build i_hate_cpp.exe: CXX_EXECUTABLE_LINKER__i_hate_cpp_Debug CMakeFiles/i_hate_cpp.dir/main.cpp.obj CMakeFiles/i_hate_cpp.dir/week1/task1.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\i_hate_cpp.dir
