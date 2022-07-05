@@ -3,128 +3,233 @@
 
 #endif //I_HATE_CPP_TASK3_H
 
-#include <cmath>
+#include <array>
 #include <vector>
+#include <initializer_list>
+#include <cmath>
+#include <cassert>
 
-template<typename T, int N>
-class GeometricVector {
+template<typename Type, int N>
+class Vector {
 private:
-    T *column;
-    double length;
+    static_assert(N >= 0, "N must be an integer equal to or greater than 0");
+    std::array<Type, N> data_;
 public:
-    GeometricVector() {
-        column = nullptr;
-        length = 0;
+    constexpr Vector() {
+        data_ = {};
     }
 
-    GeometricVector(T *column) {
-        this->column = column;
-        double length_square = 0;
+    constexpr Vector(const Vector<Type, N> &other) {
         for (int i = 0; i < N; i++) {
-            length_square += pow(column[i], 2);
-        }
-        this->length = sqrt(length_square);
-    }
-
-    void show() {
-        for (int i = 0; i < N; i++) {
-            std::cout << column[i] << std::endl;
+            data_[i] = other.data_[i];
         }
     }
 
-    double get_length() {
-        return length;
-    }
-
-    GeometricVector<T, N> operator+(GeometricVector<T, N> v2) {
-        T res_column[N];
-        for (int i = 0; i < N; i++) {
-            res_column[i] = column[i] + v2.column[i];
+    constexpr Vector(const std::initializer_list<Type> &list) {
+        int i = 0;
+        for (const auto &element: list) {
+            data_[i] = element;
+            i++;
         }
-        GeometricVector<T, N> res_v(res_column);
-        return res_v;
     }
 
-    template<typename P>
-    GeometricVector<T, N> operator*(P num) {
-        T res_column[N];
+    const Type &operator[](unsigned int i) const {
+        return data_[i];
+    }
+
+    Type &operator[](unsigned int i) {
+        return data_[i];
+    }
+
+    Type norm() const {
+        Type res = 0;
         for (int i = 0; i < N; i++) {
-            res_column[i] = column[i] * num;
+            res += pow(data_[i], 2);
         }
-        GeometricVector<T, N> res_v(res_column);
-        return res_v;
+        return sqrt(res);
     }
 
-    template<typename P>
-    friend GeometricVector<T, N> operator*(P num, GeometricVector<T, N> v) {
-        T res_column[N];
+    Vector<Type, N> operator*=(Type num) {
+        *this = (*this) * num;
+        return *this;
+    }
+
+    Vector<Type, N> operator/=(Type num) {
+        *this = (*this) / num;
+        return *this;
+    }
+
+    Vector<Type, N> operator+=(const Vector<Type, N> &other) {
+        *this = (*this) + other;
+        return *this;
+    }
+
+    Vector<Type, N> operator-=(const Vector<Type, N> &other) {
+        *this = (*this) - other;
+        return *this;
+    }
+
+    Vector<Type, N> operator*(Type num) const {
+        Vector<Type, N> v_res;
         for (int i = 0; i < N; i++) {
-            res_column[i] = v.column[i] * num;
+            v_res.data_[i] = data_[i] * num;
         }
-        GeometricVector<T, N> res_v(res_column);
-        return res_v;
+        return v_res;
     }
 
-    GeometricVector<T, N> operator-(GeometricVector<T, N> v2) {
-        T res_column[N];
+    Vector<Type, N> operator/(Type num) const {
+        Vector<Type, N> v_res;
         for (int i = 0; i < N; i++) {
-            res_column[i] = column[i] - v2.column[i];
+            v_res.data_[i] = data_[i] / num;
         }
-        GeometricVector<T, N> res_v(res_column);
-        return res_v;
+        return v_res;
     }
 
-    bool operator>(GeometricVector<T, N> v2) {
-        return (length > v2.length);
-    }
-
-    bool operator<(GeometricVector<T, N> v2) {
-        return (length < v2.length);
-    }
-
-    bool operator==(GeometricVector<T, N> v2) {
-        return (length == v2.length);
-    }
-
-    void operator=(GeometricVector<T, N> v2) {
+    Vector<Type, N> operator+(const Vector<Type, N> &other) const {
+        Vector<Type, N> v_res;
         for (int i = 0; i < N; i++) {
-            column[i] = v2.column[i];
+            v_res.data_[i] = data_[i] + other.data_[i];
         }
+        return v_res;
+    }
+
+    Vector<Type, N> operator-(const Vector<Type, N> &other) const {
+        return (*this) + (other * (-1));
+    }
+
+    friend Vector<Type, N> operator*(Type num, const Vector<Type, N> &vec) {
+        Vector<Type, N> v_res = vec * num;
+        return v_res;
+    }
+
+    friend std::ostream &operator<<(std::ostream &out, const Vector<Type, N> &vec) {
+        if (N == 0) {
+            return out;
+        }
+        out << "(";
+        for (int i = 0; i < vec.data_.size(); i++) {
+            if (i != vec.data_.size() - 1) {
+                out << vec.data_[i] << ", ";
+                continue;
+            }
+            out << vec.data_[i] << ")" << std::endl;
+        }
+        return out;
     }
 };
 
-template<typename T>
-class GeometricVector<T, -1> {
+constexpr int Dynamic = -1;
+
+template<typename Type>
+class Vector<Type, Dynamic> {
 private:
-    std::vector<T> column;
-    double length;
+    std::vector<Type> data_;
+    int size_;
+
 public:
-    GeometricVector(T *column, unsigned int N) {
-        for (int i = 0; i < N; i++) {
-            this->column.push_back(column[i]);
+    constexpr Vector() {
+        data_ = {};
+        size_ = 0;
+    }
+
+    constexpr Vector(const Vector<Type, Dynamic> &other) {
+        for (int i = 0; i < other.size_; i++) {
+            data_.push_back(other.data_[i]);
         }
-        double length_square = 0;
-        for (int i = 0; i < N; i++) {
-            length_square += pow(column[i], 2);
+        size_ = other.size_;
+    }
+
+    constexpr Vector(const std::initializer_list<Type> &list) {
+        for (const auto &element: list) {
+            data_.push_back(element);
         }
-        this->length = sqrt(length_square);
+        size_ = list.size();
     }
 
-    double get_length() {
-        return length;
+    const Type &operator[](unsigned int i) const {
+        return data_[i];
     }
 
-    unsigned int get_size() {
-        return column.size();
+    Type &operator[](unsigned int i) {
+        return data_[i];
     }
 
-    void show() {
-        for (int i = 0; i < column.size(); i++) {
-            std::cout << column[i] << std::endl;
+    Type norm() const {
+        Type res = 0;
+        for (int i = 0; i < size_; i++) {
+            res += pow(data_[i], 2);
         }
+        return sqrt(res);
     }
 
-    void add_element(T num) {
-        column.push_back(num);
+    Vector<Type, Dynamic> operator*=(Type num) {
+        *this = (*this) * num;
+        return *this;
+    }
+
+    Vector<Type, Dynamic> operator/=(Type num) {
+        *this = (*this) / num;
+        return *this;
+    }
+
+    Vector<Type, Dynamic> operator+=(const Vector<Type, Dynamic> &other) {
+        *this = *this + other;
+        return *this;
+    }
+
+    Vector<Type, Dynamic> operator-=(const Vector<Type, Dynamic> &other) {
+        *this = *this + other;
+        return *this;
+    }
+
+    Vector<Type, Dynamic> operator*(Type num) const {
+        Vector<Type, Dynamic> v_res;
+        for (int i = 0; i < size_; i++) {
+            v_res.data_.push_back(data_[i] * num);
+            v_res.size_++;
+        }
+        return v_res;
+    }
+
+    Vector<Type, Dynamic> operator/(Type num) const {
+        Vector<Type, Dynamic> v_res;
+        for (int i = 0; i < size_; i++) {
+            v_res.data_.push_back(data_[i] / num);
+            v_res.size_++;
+        }
+        return v_res;
+    }
+
+    Vector<Type, Dynamic> operator+(const Vector<Type, Dynamic> &other) const {
+        assert(size_ == other.size_ && "Summand vectors must be the same size");
+        Vector<Type, Dynamic> v_res;
+        for (int i = 0; i < size_; i++) {
+            v_res.data_.push_back(data_[i] + other.data_[i]);
+            v_res.size_++;
+        }
+        return v_res;
+    }
+
+    Vector<Type, Dynamic> operator-(const Vector<Type, Dynamic> &other) const {
+        return (*this) + (other * (-1));
+    }
+
+    friend Vector<Type, Dynamic> operator*(Type num, const Vector<Type, Dynamic> &vec) {
+        return vec * num;
+    }
+
+    friend std::ostream &operator<<(std::ostream &out, const Vector<Type, Dynamic> &vec) {
+        if (vec.size_ == 0) {
+            return out;
+        }
+        out << "(";
+        for (int i = 0; i < vec.size_; i++) {
+            if (i != vec.data_.size() - 1) {
+                out << vec.data_[i] << ", ";
+                continue;
+            }
+            out << vec.data_[i] << ")" << std::endl;
+        }
+        return out;
     }
 };
