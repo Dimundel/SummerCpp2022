@@ -9,11 +9,13 @@ struct Point {
 std::vector<Point> terribleTrigonometry(unsigned int n) {
     std::vector<Point> res;
     double x, y;
-    Point pnt{};
-    double step = 2 * M_PI / n;
-    for (int i = 0; i < n; i++) {
-        x = std::cos(0 + step * i);
-        y = std::sin(0 + step * i);
+    double a = sin(2 * M_PI / n);
+    double b = cos(2 * M_PI / n);
+    Point pnt{1.0, 0.0};
+    res.push_back(pnt);
+    for (int i = 1; i < n; i++) {
+        x = res[i - 1].x * b - res[i - 1].y * a;
+        y = res[i - 1].y * b + res[i - 1].x * a;
         pnt = {x, y};
         res.push_back(pnt);
     }
