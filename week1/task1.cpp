@@ -8,9 +8,10 @@ struct Point {
 
 std::vector<Point> terribleTrigonometry(unsigned int n) {
     std::vector<Point> res;
+    res.reserve(n);
     double x, y;
-    double a = sin(2 * M_PI / n);
-    double b = cos(2 * M_PI / n);
+    double a = std::sin(2 * M_PI / n);
+    double b = std::cos(2 * M_PI / n);
     Point pnt{1.0, 0.0};
     res.push_back(pnt);
     for (int i = 1; i < n; i++) {

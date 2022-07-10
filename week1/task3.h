@@ -44,57 +44,61 @@ public:
     Type norm() const {
         Type res = 0;
         for (int i = 0; i < N; i++) {
-            res += pow(data_[i], 2);
+            res += data_[i] * data_[i];
         }
-        return sqrt(res);
+        return std::sqrt(res);
     }
 
-    Vector<Type, N> operator*=(Type num) {
-        *this = (*this) * num;
+    Vector<Type, N> &operator*=(Type num) {
+        for (int i = 0; i < N; i++) {
+            data_[i] *= num;
+        }
         return *this;
     }
 
-    Vector<Type, N> operator/=(Type num) {
-        *this = (*this) / num;
+    Vector<Type, N> &operator/=(Type num) {
+        for (int i = 0; i < N; i++) {
+            data_[i] /= num;
+        }
         return *this;
     }
 
-    Vector<Type, N> operator+=(const Vector<Type, N> &other) {
-        *this = (*this) + other;
+    Vector<Type, N> &operator+=(const Vector<Type, N> &other) {
+        for (int i = 0; i < N; i++) {
+            data_[i] += other.data_[i];
+        }
         return *this;
     }
 
-    Vector<Type, N> operator-=(const Vector<Type, N> &other) {
-        *this = (*this) - other;
+    Vector<Type, N> &operator-=(const Vector<Type, N> &other) {
+        for (int i = 0; i < N; i++) {
+            data_[i] -= other.data_[i];
+        }
         return *this;
     }
 
     Vector<Type, N> operator*(Type num) const {
-        Vector<Type, N> v_res;
-        for (int i = 0; i < N; i++) {
-            v_res.data_[i] = data_[i] * num;
-        }
+        Vector<Type, N> v_res(*this);
+        v_res *= num;
         return v_res;
     }
 
     Vector<Type, N> operator/(Type num) const {
-        Vector<Type, N> v_res;
-        for (int i = 0; i < N; i++) {
-            v_res.data_[i] = data_[i] / num;
-        }
+        Vector<Type, N> v_res(*this);
+        v_res /= num;
         return v_res;
     }
 
     Vector<Type, N> operator+(const Vector<Type, N> &other) const {
-        Vector<Type, N> v_res;
-        for (int i = 0; i < N; i++) {
-            v_res.data_[i] = data_[i] + other.data_[i];
-        }
+        Vector<Type, N> v_res(*this);
+        v_res += other;
         return v_res;
     }
 
     Vector<Type, N> operator-(const Vector<Type, N> &other) const {
-        return (*this) + (other * (-1));
+        Vector<Type, N> v_res(*this);
+        v_res -= other;
+        return v_res;
     }
 
     friend Vector<Type, N> operator*(Type num, const Vector<Type, N> &vec) {
@@ -124,26 +128,24 @@ template<typename Type>
 class Vector<Type, Dynamic> {
 private:
     std::vector<Type> data_;
-    int size_;
 
 public:
     constexpr Vector() {
         data_ = {};
-        size_ = 0;
     }
 
     constexpr Vector(const Vector<Type, Dynamic> &other) {
-        for (int i = 0; i < other.size_; i++) {
+        data_.reserve(other.data_.size());
+        for (int i = 0; i < other.data_.size(); i++) {
             data_.push_back(other.data_[i]);
         }
-        size_ = other.size_;
     }
 
     constexpr Vector(const std::initializer_list<Type> &list) {
+        data_.reserve(list.size());
         for (const auto &element: list) {
             data_.push_back(element);
         }
-        size_ = list.size();
     }
 
     const Type &operator[](unsigned int i) const {
@@ -156,62 +158,64 @@ public:
 
     Type norm() const {
         Type res = 0;
-        for (int i = 0; i < size_; i++) {
-            res += pow(data_[i], 2);
+        for (int i = 0; i < data_.size(); i++) {
+            res += data_[i] * data_[i];
         }
-        return sqrt(res);
+        return std::sqrt(res);
     }
 
-    Vector<Type, Dynamic> operator*=(Type num) {
-        *this = (*this) * num;
+    Vector<Type, Dynamic> &operator*=(Type num) {
+        for (int i = 0; i < data_.size(); i++) {
+            data_[i] *= num;
+        }
         return *this;
     }
 
-    Vector<Type, Dynamic> operator/=(Type num) {
-        *this = (*this) / num;
+    Vector<Type, Dynamic> &operator/=(Type num) {
+        for (int i = 0; i < data_.size(); i++) {
+            data_[i] /= num;
+        }
         return *this;
     }
 
-    Vector<Type, Dynamic> operator+=(const Vector<Type, Dynamic> &other) {
-        *this = *this + other;
+    Vector<Type, Dynamic> &operator+=(const Vector<Type, Dynamic> &other) {
+        for (int i = 0; i < data_.size(); i++) {
+            data_[i] += other.data_[i];
+        }
         return *this;
     }
 
-    Vector<Type, Dynamic> operator-=(const Vector<Type, Dynamic> &other) {
-        *this = *this + other;
+    Vector<Type, Dynamic> &operator-=(const Vector<Type, Dynamic> &other) {
+        for (int i = 0; i < data_.size(); i++) {
+            data_[i] -= other.data_[i];
+        }
         return *this;
     }
 
     Vector<Type, Dynamic> operator*(Type num) const {
-        Vector<Type, Dynamic> v_res;
-        for (int i = 0; i < size_; i++) {
-            v_res.data_.push_back(data_[i] * num);
-            v_res.size_++;
-        }
+        Vector<Type, Dynamic> v_res(*this);
+        v_res *= num;
         return v_res;
     }
 
     Vector<Type, Dynamic> operator/(Type num) const {
-        Vector<Type, Dynamic> v_res;
-        for (int i = 0; i < size_; i++) {
-            v_res.data_.push_back(data_[i] / num);
-            v_res.size_++;
-        }
+        Vector<Type, Dynamic> v_res(*this);
+        v_res /= num;
         return v_res;
     }
 
     Vector<Type, Dynamic> operator+(const Vector<Type, Dynamic> &other) const {
-        assert(size_ == other.size_ && "Summand vectors must be the same size");
-        Vector<Type, Dynamic> v_res;
-        for (int i = 0; i < size_; i++) {
-            v_res.data_.push_back(data_[i] + other.data_[i]);
-            v_res.size_++;
-        }
+        assert(data_.size() == other.data_.size() && "Summand vectors must be the same size");
+        Vector<Type, Dynamic> v_res(*this);
+        v_res += other;
         return v_res;
     }
 
     Vector<Type, Dynamic> operator-(const Vector<Type, Dynamic> &other) const {
-        return (*this) + (other * (-1));
+        assert(data_.size() == other.data_.size() && "Summand vectors must be the same size");
+        Vector<Type, Dynamic> v_res(*this);
+        v_res -= other;
+        return v_res;
     }
 
     friend Vector<Type, Dynamic> operator*(Type num, const Vector<Type, Dynamic> &vec) {
@@ -219,11 +223,11 @@ public:
     }
 
     friend std::ostream &operator<<(std::ostream &out, const Vector<Type, Dynamic> &vec) {
-        if (vec.size_ == 0) {
+        if (vec.data_.size() == 0) {
             return out;
         }
         out << "(";
-        for (int i = 0; i < vec.size_; i++) {
+        for (int i = 0; i < vec.data_.size(); i++) {
             if (i != vec.data_.size() - 1) {
                 out << vec.data_[i] << ", ";
                 continue;

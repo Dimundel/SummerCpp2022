@@ -10,4 +10,4 @@ struct Point {
     double y;
 };
 
-std::vector<Point> terribleTrigonometry(unsigned int n);
+inline std::vector<Point> terribleTrigonometry(unsigned int n);
