@@ -33,7 +33,7 @@ public:
         }
     }
 
-    const Type &operator[](unsigned int i) const {
+    constexpr Type &operator[](unsigned int i) const {
         return data_[i];
     }
 
@@ -227,13 +227,10 @@ public:
             return out;
         }
         out << "(";
-        for (int i = 0; i < vec.data_.size(); i++) {
-            if (i != vec.data_.size() - 1) {
-                out << vec.data_[i] << ", ";
-                continue;
-            }
-            out << vec.data_[i] << ")" << std::endl;
+        for (int i = 0; i < vec.data_.size() - 1; i++) {
+            out << vec.data_[i] << ", ";
         }
+        out << vec.data_.back() << ")" << std::endl;
         return out;
     }
 };

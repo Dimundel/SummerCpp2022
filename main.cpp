@@ -2,24 +2,11 @@
 #include "week1/task1.h"
 #include "week1/task2.h"
 #include "week1/task3.h"
+#include "polynomial.h"
 
 int main() {
-    Vector<float, 3> v1{1, 2, 3};
-    Vector<float, 3> v2{5, -2, 1};
-
-    std::cout << v1 << v1 + v2 << v1 - v2 << v1 * 2 << 2 * v1 << v1 / 2 << v1.norm() << std::endl;
-
-    v1 *= 2;
-
-    std::cout << v1;
-
-    Vector<float, -1> v3{1, 1, 3, 5};
-    Vector<float, -1> v4{1, 0, 3, 5};
-
-    std::cout << v3 + v4 << v3 * 2 << v3.norm() << std::endl;
-
-    v3 += v4;
-
-    std::cout << v3 / 2;
+    std::pair<int, float> mon1{0, 6}, mon2{1, 11}, mon3{2, 6}, mon4{3, 1}, mon5{0, 1}, mon6{1, 1};
+    PolynomialSparse<float> pol1{mon1, mon2, mon3, mon4}, pol2{mon5, mon6};
+    std::cout << pol1 / pol2 << std::endl << pol1.differ() << std::endl << pol1.antidiffer();
 }
 
