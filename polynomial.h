@@ -1,8 +1,6 @@
 #ifndef I_HATE_CPP_POLYNOMIAL_H
 #define I_HATE_CPP_POLYNOMIAL_H
 
-#endif //I_HATE_CPP_POLYNOMIAL_H
-
 #include <initializer_list>
 #include <vector>
 #include <map>
@@ -48,12 +46,10 @@ public:
     }
 
     Type &operator[](const unsigned int i) {
-        assert(i >= 0 && i < data_.size());
         return data_[i];
     }
 
     const Type &operator[](const unsigned int i) const {
-        assert(i >= 0 && i < data_.size());
         return data_[i];
     }
 
@@ -332,3 +328,5 @@ public:
         return pol_res;
     }
 };
+
+#endif //I_HATE_CPP_POLYNOMIAL_H
