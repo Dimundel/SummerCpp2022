@@ -154,6 +154,21 @@ public:
         }
         return pol_res;
     }
+
+    Type operator()(const Type x) const {
+        Type res = 0;
+        for (int i = 0; i < data_.size(); i++) {
+            res += data_[i] * (std::pow(x, i));
+        }
+        return res;
+    }
+
+    Type root(Type approx_root, int iterates) const{
+        for(int i = 0; i < iterates; i++){
+            approx_root = approx_root - (*this)(approx_root)/(*this).differ()(approx_root);
+        }
+        return approx_root;
+    }
 };
 
 template<typename Type>
@@ -326,6 +341,21 @@ public:
         }
         pol_res.cut();
         return pol_res;
+    }
+
+    Type operator()(const Type x) const{
+        Type res = 0;
+        for(const std::pair<int, Type> &mon: data_){
+            res += mon.second * std::pow(x, mon.first);
+        }
+        return res;
+    }
+
+    Type root(Type approx_root, int iterates) const{
+        for(int i = 0; i < iterates; i++){
+            approx_root = approx_root - (*this)(approx_root)/(*this).differ()(approx_root);
+        }
+        return approx_root;
     }
 };
 
