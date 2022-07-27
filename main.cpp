@@ -5,8 +5,9 @@
 #include "polynomial.h"
 
 int main() {
-    std::pair<int, float> mon1{0, 10}, mon2{2, -5}, mon3{3, 1};
-    PolynomialSparse<float> pol1{mon1, mon2, mon3};
-    std::cout << pol1.root(3, 10);
+    Polynomial<float> pol1{0, 0, 0, 3, -4, 1};
+    for (const auto &root: pol1.roots(-3, 3, 100, 100)) {
+        std::cout << root << " ";
+    }
 }
 

@@ -163,11 +163,32 @@ public:
         return res;
     }
 
-    Type root(Type approx_root, int iterates) const{
-        for(int i = 0; i < iterates; i++){
-            approx_root = approx_root - (*this)(approx_root)/(*this).differ()(approx_root);
+    Type root_newton(Type approx_root, int iterates) const {
+        for (int i = 0; i < iterates; i++) {
+            approx_root = approx_root - (*this)(approx_root) / (*this).differ()(approx_root);
         }
         return approx_root;
+    }
+
+    std::vector<Type> roots(Type a, Type b, int segments, int iterates) {
+        std::vector<Type> res;
+        res.reserve(segments);
+        Type length = (b - a) / segments;
+        Type a_it = a;
+        Type b_it = a + length;
+        if ((*this)(a_it) == 0) {
+            res.push_back(a_it);
+        }
+        for (int i = 0; i <= segments; i++) {
+            if ((*this)(a_it) * (*this)(b_it) < 0) {
+                res.push_back(root_newton((a_it + b_it) / 2, iterates));
+            } else if ((*this)(b_it) == 0) {
+                res.push_back(b_it);
+            }
+            a_it = b_it;
+            b_it += length;
+        }
+        return res;
     }
 };
 
@@ -343,19 +364,40 @@ public:
         return pol_res;
     }
 
-    Type operator()(const Type x) const{
+    Type operator()(const Type x) const {
         Type res = 0;
-        for(const std::pair<int, Type> &mon: data_){
+        for (const std::pair<int, Type> &mon: data_) {
             res += mon.second * std::pow(x, mon.first);
         }
         return res;
     }
 
-    Type root(Type approx_root, int iterates) const{
-        for(int i = 0; i < iterates; i++){
-            approx_root = approx_root - (*this)(approx_root)/(*this).differ()(approx_root);
+    Type root_newton(Type approx_root, int iterates) const {
+        for (int i = 0; i < iterates; i++) {
+            approx_root = approx_root - (*this)(approx_root) / (*this).differ()(approx_root);
         }
         return approx_root;
+    }
+
+    std::vector<Type> roots(Type a, Type b, int segments, int iterates) {
+        std::vector<Type> res;
+        res.reserve(segments);
+        Type length = (b - a) / segments;
+        Type a_it = a;
+        Type b_it = a + length;
+        if ((*this)(a_it) == 0) {
+            res.push_back(a_it);
+        }
+        for (int i = 0; i <= segments; i++) {
+            if ((*this)(a_it) * (*this)(b_it) < 0) {
+                res.push_back(root_newton((a_it + b_it) / 2, iterates));
+            } else if ((*this)(b_it) == 0) {
+                res.push_back(b_it);
+            }
+            a_it = b_it;
+            b_it += length;
+        }
+        return res;
     }
 };
 
