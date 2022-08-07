@@ -104,7 +104,8 @@
 				2,
 				3,
 				4,
-				5
+				5,
+				6
 			]
 		}
 	],
@@ -140,6 +141,11 @@
 		{
 			"backtrace" : 1,
 			"path" : "polynomial.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "polynomial_sparse.h",
 			"sourceGroupIndex" : 1
 		}
 	],
